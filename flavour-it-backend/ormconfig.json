@@ -6,5 +6,10 @@
   "password": "P@ssword1",
   "database": "flavour_it",
   "entities": ["dist/**/*.entity{.ts,.js}"],
-  "synchronize": false
+  "synchronize": false,
+  "migrationsTableName": "db_migrations",
+  "migrations": ["dist/database/migrations/*{.ts,.js}"],
+  "cli": {
+    "migrationsDir": "src/database/migrations"
+  }
 }
