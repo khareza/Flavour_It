@@ -9,11 +9,11 @@ import { UserAllergy } from '../UserAllergy/user-allergy.entity';
 
 @Entity()
 export class User extends BaseEntity {
-  @Column()
-  firstName: string;
+  @Column({ nullable: true })
+  firstName?: string;
 
-  @Column()
-  lastName: string;
+  @Column({ nullable: true })
+  lastName?: string;
 
   @Column()
   email: string;
@@ -21,59 +21,59 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column()
-  birthDate: Date;
+  @Column({ nullable: true })
+  birthDate?: Date;
 
-  @Column()
-  country: string;
+  @Column({ nullable: true })
+  country?: string;
 
-  @Column()
-  city: string;
+  @Column({ nullable: true })
+  city?: string;
 
-  @Column()
-  houseApartmentNumber: string;
+  @Column({ nullable: true })
+  houseApartmentNumber?: string;
 
-  @Column()
-  phone: string;
+  @Column({ nullable: true })
+  phone?: string;
 
-  @Column()
-  joinDate: Date;
+  @Column({ nullable: true })
+  joinDate?: Date;
 
-  @Column()
-  avatarUrl: string;
+  @Column({ nullable: true })
+  avatarUrl?: string;
 
-  @Column()
+  @Column({ default: 0 })
   rate: number;
 
-  @Column()
+  @Column({ default: 0 })
   votesUp: number;
 
-  @Column()
+  @Column({ default: 0 })
   votesDown: number;
 
-  @Column()
+  @Column({ default: 0 })
   offersAmount: number;
 
-  @Column()
+  @Column({ default: 0 })
   finishedOffersAmount: number;
 
-  @Column()
+  @Column({ default: 0 })
   activeOffersAmount: number;
 
-  @Column()
+  @Column({ default: 0 })
   ordersAmount: number;
 
-  @Column()
+  @Column({ default: 0 })
   finishedOrdersAmount: number;
 
-  @Column()
+  @Column({ default: 0 })
   activeOrdersAmount: number;
 
-  @Column()
-  resetPasswordHash: string;
+  @Column({ nullable: true })
+  resetPasswordHash?: string;
 
-  @Column()
-  activationHash: string;
+  @Column({ nullable: true })
+  activationHash?: string;
 
   @Column({ default: false })
   isActive: boolean;

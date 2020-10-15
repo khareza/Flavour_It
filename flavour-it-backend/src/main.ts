@@ -7,6 +7,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
   const options = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Flavour it API')
     .setVersion('1.0')
     .build();

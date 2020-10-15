@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { AuthController } from './auth.controller';
+import { EncryptionModule } from '../encryption/encryption.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { AuthController } from './auth.controller';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.EXPIRES_IN }
     }),
-    AppConfigModule
+    AppConfigModule,
+    EncryptionModule
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
