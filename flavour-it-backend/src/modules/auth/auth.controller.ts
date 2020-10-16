@@ -1,11 +1,12 @@
-import { Controller, Post, UseGuards, Request, Get, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
+import { ApiTagEnum } from 'src/common/enums/api-tag.enum';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt/jwt.guard';
 import { LocalAuthGuard } from './guards/local/local.guard';
 import { LoginRequestDto } from './models/login-request.dto';
 
-@ApiTags('Authentication')
+@ApiTags(ApiTagEnum.AUTH)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
