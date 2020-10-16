@@ -3,34 +3,34 @@ import { User } from 'src/database/entities/User/user.entity';
 
 export class UserDto {
   @ApiProperty()
-  firstName: string;
+  firstName?: string;
 
   @ApiProperty()
-  lastName: string;
+  lastName?: string;
 
   @ApiProperty()
   email: string;
 
   @ApiProperty()
-  birthDate: Date;
+  birthDate?: Date;
 
   @ApiProperty()
-  country: string;
+  country?: string;
 
   @ApiProperty()
-  city: string;
+  city?: string;
 
   @ApiProperty()
-  houseApartmentNumber: string;
+  houseApartmentNumber?: string;
 
   @ApiProperty()
-  phone: string;
+  phone?: string;
 
   @ApiProperty()
-  joinDate: Date;
+  joinDate?: Date;
 
   @ApiProperty()
-  avatarUrl: string;
+  avatarUrl?: string;
 
   @ApiProperty()
   rate: number;
@@ -60,6 +60,24 @@ export class UserDto {
   activeOrdersAmount: number;
 
   constructor(dto: User) {
-    Object.assign(this, dto);
+    this.firstName = dto.firstName;
+    this.lastName = dto.lastName;
+    this.email = dto.email;
+    this.birthDate = dto.birthDate;
+    this.country = dto.country;
+    this.city = dto.city;
+    this.houseApartmentNumber = dto.houseApartmentNumber;
+    this.phone = dto.phone;
+    this.joinDate = dto.joinDate;
+    this.avatarUrl = dto.avatarUrl;
+    this.rate = dto.rate;
+    this.votesUp = dto.votesUp;
+    this.votesDown = dto.votesDown;
+    this.offersAmount = dto.offersAmount;
+    this.finishedOffersAmount = dto.finishedOffersAmount;
+    this.activeOffersAmount = dto.activeOffersAmount;
+    this.ordersAmount = dto.ordersAmount;
+    this.finishedOrdersAmount = dto.finishedOrdersAmount;
+    this.activeOrdersAmount = dto.activeOrdersAmount;
   }
 }
