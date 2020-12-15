@@ -1,0 +1,6 @@
+node_modules
+build
+.dockerignore
+Dockerfile.yml
+Dockerfile.dev.yml
+Dockerfile.tests.yml

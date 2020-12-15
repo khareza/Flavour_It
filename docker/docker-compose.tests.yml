@@ -1,0 +1,22 @@
+version: "3"
+services:
+  flavour-it-backend-tests:
+    build:
+      dockerfile: ./docker/Dockerfile.dev
+      context: ../flavour-it-backend
+    volumes:
+      - /app/node_modules
+      - ../flavour-it-backend:/app
+    stdin_open: true
+    command: ["npm", "run", "test:watch"]
+  flavour-it-frontend-tests:
+    build:
+      dockerfile: ./docker/Dockerfile.dev
+      context: ../flavour-it-frontend
+    volumes:
+      - /app/node_modules
+      - ../flavour-it-frontend:/app
+    stdin_open: true
+    command: ["npm", "run", "test"]
+volumes:
+  db_data: {}

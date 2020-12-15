@@ -1,15 +1,15 @@
 {
   "type": "mysql",
-  "host": "localhost",
+  "host": "flavour-it-db",
   "port": 3306,
   "username": "root",
   "password": "P@ssword1",
   "database": "flavour_it",
-  "entities": ["src/**/*.entity{.ts,.js}"],
+  "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": false,
   "migrationsTableName": "db_migrations",
-  "migrations": ["src/database/migrations/*{.ts,.js}"],
+  "migrations": ["dist/database/migrations/*{.ts,.js}"],
   "cli": {
-    "migrationsDir": "src/database/migrations"
+    "migrationsDir": "dist/database/migrations"
   }
 }
