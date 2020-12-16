@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/database/entities/User/user.entity';
 import { Repository } from 'typeorm';
 import { EncryptionService } from '../encryption/encryption.service';
-import { AccountCreateExceptionsEnum } from './exception-codes/account-create-exceptions.enum';
-import { CreateAccountDto } from './models/create-account.dto';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { AccountExceptionMessageEnum } from './exception-messages/account-exception-message.enum';
+import { IAccountService } from './interfaces/interfaces';
 
 @Injectable()
-export class AccountService {
+export class AccountService implements IAccountService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>, private readonly encryptionService: EncryptionService) {}
 
   async create(dto: CreateAccountDto): Promise<void> {
@@ -17,7 +18,7 @@ export class AccountService {
       .getOne();
 
     if (existedUser) {
-      throw new BadRequestException(AccountCreateExceptionsEnum.EXISTS);
+      throw new BadRequestException(AccountExceptionMessageEnum.EXISTS);
     }
 
     const createdUser = this.userRepository.create({

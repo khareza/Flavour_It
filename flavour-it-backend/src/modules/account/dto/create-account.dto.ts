@@ -1,27 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, Matches, Equals, MaxDate, MaxLength, MinLength, IsOptional } from 'class-validator';
-import { AccountCreateExceptionsEnum } from '../exception-codes/account-create-exceptions.enum';
+import { AccountExceptionMessageEnum } from '../exception-messages/account-exception-message.enum';
 
 export class CreateAccountDto {
-  @IsNotEmpty({ message: AccountCreateExceptionsEnum.REQUIRED_EMAIL })
-  @IsEmail(undefined, { message: AccountCreateExceptionsEnum.INVALID_EMAIL })
+  @IsNotEmpty({ message: AccountExceptionMessageEnum.REQUIRED_EMAIL })
+  @IsEmail(undefined, { message: AccountExceptionMessageEnum.INVALID_EMAIL })
   @ApiProperty()
   email: string;
 
-  @MinLength(8, {
-    message: AccountCreateExceptionsEnum.PASSWORD_MIN_EXCEEDED
-  })
-  @MaxLength(32, {
-    message: AccountCreateExceptionsEnum.PASSWORD_MAX_EXCEEDED
-  })
+  @MinLength(8)
+  @MaxLength(32)
   @Matches(/(?=.*[A-Z])/, {
-    message: AccountCreateExceptionsEnum.UPPERCASE_LETTER
+    message: AccountExceptionMessageEnum.UPPERCASE_LETTER
   })
   @Matches(/(?=.*\d)/, {
-    message: AccountCreateExceptionsEnum.DIGIT
+    message: AccountExceptionMessageEnum.DIGIT
   })
   @Matches(/(?=.*[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])/, {
-    message: AccountCreateExceptionsEnum.SPECIAL_CHARACTER
+    message: AccountExceptionMessageEnum.SPECIAL_CHARACTER
   })
   @ApiProperty()
   password: string;
@@ -30,7 +26,7 @@ export class CreateAccountDto {
   confirmPassword: string;
 
   @Equals(true, {
-    message: AccountCreateExceptionsEnum.NO_AGREEMENT
+    message: AccountExceptionMessageEnum.NO_AGREEMENT
   })
   @ApiProperty()
   agreement: boolean;
@@ -44,7 +40,7 @@ export class CreateAccountDto {
   @ApiProperty()
   @IsOptional()
   @MaxDate(new Date(), {
-    message: AccountCreateExceptionsEnum.DATE_IN_PAST
+    message: AccountExceptionMessageEnum.DATE_IN_PAST
   })
   birthDate?: Date;
 
