@@ -20,4 +20,7 @@ export class AppConfigService {
   get ignoreExpiration(): string | undefined {
     return this.configService.get<string>('jwt.ignoreExpiration');
   }
+  get database(): string | undefined {
+    return this.configService.get('database');
+  }
 }
