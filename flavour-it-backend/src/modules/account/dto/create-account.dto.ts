@@ -39,9 +39,6 @@ export class CreateAccountDto {
 
   @ApiProperty()
   @IsOptional()
-  @MaxDate(new Date(), {
-    message: AccountExceptionMessageEnum.DATE_IN_PAST
-  })
   birthDate?: Date;
 
   @ApiProperty()
