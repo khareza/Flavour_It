@@ -1,0 +1,327 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Allergy {
+  id            Int           @id @default(autoincrement())
+  createdOn     DateTime
+  modifiedOn    DateTime?
+  name          String
+  icon          String
+  userAllergies UserAllergy[]
+
+  @@map("allergy")
+}
+
+model BlockedUser {
+  id             Int       @id @default(autoincrement())
+  createdOn      DateTime
+  modifiedOn     DateTime?
+  blockDate      DateTime
+  isActive       Boolean
+  blockingUserId Int
+  blockedUserId  Int
+  blockedUser    User      @relation("BlockedUserRel", fields: [blockedUserId], references: [id])
+  blockingUser   User      @relation("BlockingUserRel", fields: [blockingUserId], references: [id])
+
+  @@index([blockingUserId], name: "FK_02972d5482050ddce5b947ff27a")
+  @@index([blockedUserId], name: "FK_59bb7b96bfedcdc96f346dbf8c9")
+  @@map("blockedUser")
+}
+
+model Cuisine {
+  id         Int       @id @default(autoincrement())
+  createdOn  DateTime
+  modifiedOn DateTime?
+  name       String
+  offers     Offer[]
+  orders     Order[]
+
+  @@map("cuisine")
+}
+
+model DishType {
+  id         Int       @id @default(autoincrement())
+  createdOn  DateTime
+  modifiedOn DateTime?
+  name       String
+  orders     Order[]
+  offers     Offer[]
+
+  @@map("dishType")
+}
+
+model ForbiddenIngredient {
+  id           Int         @id @default(autoincrement())
+  createdOn    DateTime
+  modifiedOn   DateTime?
+  ingredientId Int?
+  orderId      Int?
+  ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
+  order        Order?      @relation(fields: [orderId], references: [id])
+
+  @@index([ingredientId], name: "FK_04530e6ca17258846c331a63569")
+  @@index([orderId], name: "FK_f640b332c6bafe7de576dc0c53e")
+  @@map("forbiddenIngredient")
+}
+
+model Ingredient {
+  id                   Int                   @id @default(autoincrement())
+  createdOn            DateTime
+  modifiedOn           DateTime?
+  name                 String
+  icon                 String
+  unitId               Int?
+  unit                 Unit?                 @relation(fields: [unitId], references: [id])
+  forbiddenIngredients ForbiddenIngredient[]
+  offerIngredients     OfferIngredient[]
+  orderIngredients     OrderIngredient[]
+
+  @@index([unitId], name: "FK_5c15451ee870cfe7294ee1b5946")
+  @@map("ingredient")
+}
+
+model Offer {
+  id                 Int               @id @default(autoincrement())
+  createdOn          DateTime
+  modifiedOn         DateTime?
+  photo              String
+  description        String
+  price              Float
+  createDate         DateTime
+  blockDate          DateTime
+  cookingTimeMinutes String
+  status             OfferStatus
+  contractorId       Int?
+  cuisineId          Int?
+  dishTypeId         Int?
+  user               User?             @relation(fields: [contractorId], references: [id])
+  cuisine            Cuisine?          @relation(fields: [cuisineId], references: [id])
+  dishType           DishType?         @relation(fields: [dishTypeId], references: [id])
+  offerIngredients   OfferIngredient[]
+  offerReviews       OfferReview[]
+  rejectionReasons   RejectionReason[]
+
+  @@index([cuisineId], name: "FK_5a75f78777821450734ef5a8691")
+  @@index([dishTypeId], name: "FK_6136ec9469fdd2bfc0806e8ff57")
+  @@index([contractorId], name: "FK_8f6a39a4bc98664496290a0254c")
+  @@map("offer")
+}
+
+enum OfferStatus {
+  STATUS1
+  STATUS2
+}
+
+model OfferIngredient {
+  id           Int         @id @default(autoincrement())
+  createdOn    DateTime
+  modifiedOn   DateTime?
+  amount       Float
+  offerId      Int?
+  ingredientId Int?
+  ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
+  offer        Offer?      @relation(fields: [offerId], references: [id])
+
+  @@index([offerId], name: "FK_44e77a8019347fa08d50eb28d5e")
+  @@index([ingredientId], name: "FK_dd2017f8a22a384e8ef5f83d2c8")
+  @@map("offerIngredient")
+}
+
+model OfferReview {
+  id                Int          @id @default(autoincrement())
+  createdOn         DateTime
+  modifiedOn        DateTime?
+  comment           String
+  vote              Vote
+  creationDate      DateTime
+  status            ReviewStatus
+  workingConditions Float
+  cooperation       Float
+  asDescribed       Float
+  reviewerId        Int?
+  offerId           Int?
+  offer             Offer?       @relation(fields: [offerId], references: [id])
+  user              User?        @relation(fields: [reviewerId], references: [id])
+
+  @@index([offerId], name: "FK_331647d9754a30eb26397aeadcc")
+  @@index([reviewerId], name: "FK_3c295597d7f8056888347d2e828")
+  @@map("offerReview")
+}
+
+model Order {
+  id                   Int                   @id @default(autoincrement())
+  createdOn            DateTime
+  modifiedOn           DateTime?
+  photo                String
+  description          String
+  price                Float
+  finishDate           DateTime
+  createDate           DateTime
+  time                 String
+  cookingTimeMinutes   Int
+  status               OrderStatus
+  principalId          Int?
+  cuisineId            Int?
+  dishTypeId           Int?
+  cuisine              Cuisine?              @relation(fields: [cuisineId], references: [id])
+  dishType             DishType?             @relation(fields: [dishTypeId], references: [id])
+  user                 User?                 @relation(fields: [principalId], references: [id])
+  forbiddenIngredients ForbiddenIngredient[]
+  orderIngredients     OrderIngredient[]
+  orderReviews         OrderReview[]
+
+  @@index([dishTypeId], name: "FK_3de05db7cd64890b9f28955205b")
+  @@index([principalId], name: "FK_5afe4859073ffb2e2ff263b89c8")
+  @@index([cuisineId], name: "FK_856dbf8d8c552bdbd780d646e0b")
+  @@map("order")
+}
+
+enum OrderStatus {
+  STATUS1
+  STATUS2
+}
+
+enum OrderTime {
+  TIME1
+  TIME2
+}
+
+model OrderIngredient {
+  id           Int         @id @default(autoincrement())
+  createdOn    DateTime
+  modifiedOn   DateTime?
+  amount       Float
+  orderId      Int?
+  ingredientId Int?
+  ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
+  order        Order?      @relation(fields: [orderId], references: [id])
+
+  @@index([ingredientId], name: "FK_1b6d440339a46f3bc6cfcdd8a1d")
+  @@index([orderId], name: "FK_f9bcc9f99cb63203eeafc28a3a0")
+  @@map("orderIngredient")
+}
+
+model OrderReview {
+  id             Int          @id @default(autoincrement())
+  createdOn      DateTime
+  modifiedOn     DateTime?
+  comment        String
+  vote           Vote
+  creationDate   DateTime
+  status         ReviewStatus
+  asExcepted     Float
+  cooperation    Float
+  executionSpeed Float
+  reviewerId     Int?
+  orderId        Int?
+  order          Order?       @relation(fields: [orderId], references: [id])
+  user           User?        @relation(fields: [reviewerId], references: [id])
+
+  @@index([reviewerId], name: "FK_173970ba4b9a79d05c9f976b07a")
+  @@index([orderId], name: "FK_d2b82986ad264b7f66d2cc649b6")
+  @@map("orderReview")
+}
+
+enum ReviewStatus {
+  GOOD
+  BAD
+}
+
+enum Vote {
+  UP
+  DOWN
+}
+
+model Reason {
+  id               Int               @id @default(autoincrement())
+  createdOn        DateTime
+  modifiedOn       DateTime?
+  reason           String
+  rejectionReasons RejectionReason[]
+
+  @@map("reason")
+}
+
+model RejectionReason {
+  id            Int       @id @default(autoincrement())
+  createdOn     DateTime
+  modifiedOn    DateTime?
+  comment       String
+  rejectionDate DateTime
+  offerId       Int?
+  reasonId      Int?
+  offer         Offer?    @relation(fields: [offerId], references: [id])
+  reason        Reason?   @relation(fields: [reasonId], references: [id])
+
+  @@index([offerId], name: "FK_4a7fa434cf9305c108b33b6500d")
+  @@index([reasonId], name: "FK_e4690d743647ae1931d066a5ccf")
+  @@map("rejectionReason")
+}
+
+model Unit {
+  id          Int          @id @default(autoincrement())
+  createdOn   DateTime
+  modifiedOn  DateTime?
+  name        String
+  ingredients Ingredient[]
+
+  @@map("unit")
+}
+
+model User {
+  id                   Int           @id @default(autoincrement())
+  createdOn            DateTime      @default(now())
+  modifiedOn           DateTime?     @updatedAt
+  firstName            String?
+  lastName             String?
+  email                String        @unique
+  password             String
+  birthDate            DateTime?
+  country              String?
+  city                 String?
+  houseApartmentNumber String?
+  phone                String?
+  joinDate             DateTime?
+  avatarUrl            String?
+  rate                 Float         @default(0)
+  votesUp              Int           @default(0)
+  votesDown            Int           @default(0)
+  offersAmount         Int           @default(0)
+  finishedOffersAmount Int           @default(0)
+  activeOffersAmount   Int           @default(0)
+  ordersAmount         Int           @default(0)
+  finishedOrdersAmount Int           @default(0)
+  activeOrdersAmount   Int           @default(0)
+  resetPasswordHash    String?
+  activationHash       String?
+  isActive             Boolean       @default(false)
+  blockedUsers         BlockedUser[] @relation("BlockedUserRel")
+  blockingUsers        BlockedUser[] @relation("BlockingUserRel")
+  offers               Offer[]
+  offerReviews         OfferReview[]
+  orders               Order[]
+  orderReviews         OrderReview[]
+  userAllergies        UserAllergy[]
+
+  @@map("user")
+}
+
+model UserAllergy {
+  id         Int       @id @default(autoincrement())
+  createdOn  DateTime
+  modifiedOn DateTime?
+  userId     Int?
+  allergyId  Int?
+  allergy    Allergy?  @relation(fields: [allergyId], references: [id])
+  user       User?     @relation(fields: [userId], references: [id])
+
+  @@index([allergyId], name: "FK_24955ded0fe98a0b8e1a5d29f9b")
+  @@index([userId], name: "FK_6f1c0b114d1e95f22100cd04b3f")
+  @@map("userAllergy")
+}

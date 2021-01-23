@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/database/entities/User/user.entity';
+import { User } from '@prisma/client';
 
 export class UserDto {
   @ApiProperty()
@@ -60,24 +60,6 @@ export class UserDto {
   activeOrdersAmount: number;
 
   constructor(dto: User) {
-    this.firstName = dto.firstName;
-    this.lastName = dto.lastName;
-    this.email = dto.email;
-    this.birthDate = dto.birthDate;
-    this.country = dto.country;
-    this.city = dto.city;
-    this.houseApartmentNumber = dto.houseApartmentNumber;
-    this.phone = dto.phone;
-    this.joinDate = dto.joinDate;
-    this.avatarUrl = dto.avatarUrl;
-    this.rate = dto.rate;
-    this.votesUp = dto.votesUp;
-    this.votesDown = dto.votesDown;
-    this.offersAmount = dto.offersAmount;
-    this.finishedOffersAmount = dto.finishedOffersAmount;
-    this.activeOffersAmount = dto.activeOffersAmount;
-    this.ordersAmount = dto.ordersAmount;
-    this.finishedOrdersAmount = dto.finishedOrdersAmount;
-    this.activeOrdersAmount = dto.activeOrdersAmount;
+    Object.assign(this, dto);
   }
 }

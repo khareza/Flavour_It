@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/database/entities/User/user.entity';
+import { User } from '@prisma/client';
 
 export class CreateAccountResponse {
   @ApiProperty()
