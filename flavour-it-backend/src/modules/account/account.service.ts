@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { EmailSenderService } from '../email-sender/email-sender.service';
 import { EncryptionService } from '../encryption/encryption.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAccountDto } from './dto/create-account.dto';
@@ -7,7 +8,11 @@ import { IAccountService } from './interfaces/interfaces';
 
 @Injectable()
 export class AccountService implements IAccountService {
-  constructor(private prisma: PrismaService, private readonly encryptionService: EncryptionService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly encryptionService: EncryptionService,
+    private readonly emailSenderService: EmailSenderService
+  ) {}
 
   async create(dto: CreateAccountDto): Promise<void> {
     const existedUser = await this.prisma.user.findFirst({ where: { email: dto.email } });
@@ -32,6 +37,14 @@ export class AccountService implements IAccountService {
       }
     });
 
-    //send activation link
+    await this.emailSenderService.sendAccountActivationLink(dto.email);
+  }
+
+  activateAccount(): void {
+    //TO DO: activate account method
+  }
+
+  resendAccountActivationEmail(): void {
+    //TO DO: resend account activation email
   }
 }
