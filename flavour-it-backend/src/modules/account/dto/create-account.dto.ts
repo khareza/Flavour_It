@@ -1,10 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, Matches, Equals, MaxDate, MaxLength, MinLength, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, Matches, Equals, MaxLength, MinLength, IsDateString } from 'class-validator';
+import { Match } from 'src/common/decorators/match.decorator';
+import { OfAge } from 'src/common/decorators/of-age.decorator';
+import { UserExists } from 'src/common/decorators/user-exists.decorator';
 import { AccountExceptionMessageEnum } from '../exception-messages/account-exception-message.enum';
 
 export class CreateAccountDto {
   @IsNotEmpty({ message: AccountExceptionMessageEnum.REQUIRED_EMAIL })
   @IsEmail(undefined, { message: AccountExceptionMessageEnum.INVALID_EMAIL })
+  @UserExists({ message: AccountExceptionMessageEnum.EMAIL_TAKEN })
   @ApiProperty()
   email: string;
 
@@ -23,6 +27,7 @@ export class CreateAccountDto {
   password: string;
 
   @ApiProperty()
+  @Match('password', { message: AccountExceptionMessageEnum.PASSWORDS_DO_NOT_MATCH })
   confirmPassword: string;
 
   @Equals(true, {
@@ -38,7 +43,8 @@ export class CreateAccountDto {
   lastName?: string;
 
   @ApiProperty()
-  @IsOptional()
+  @IsDateString()
+  @OfAge({ message: AccountExceptionMessageEnum.OF_AGE })
   birthDate?: Date;
 
   @ApiProperty()
