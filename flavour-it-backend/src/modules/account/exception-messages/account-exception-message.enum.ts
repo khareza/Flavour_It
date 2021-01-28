@@ -8,5 +8,6 @@ export enum AccountExceptionMessageEnum {
   DATE_IN_PAST = 'Date must be in past',
   PASSWORD_MAX_EXCEEDED = 'Password is too long',
   PASSWORD_MIN_EXCEEDED = 'Password is too short',
-  NO_AGREEMENT = 'To create account, please accept usage general conditions'
+  NO_AGREEMENT = 'To create account, please accept usage general conditions',
+  ACTIVATION_ERROR = 'Error occurred while trying to activate account',
 }

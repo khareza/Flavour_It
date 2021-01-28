@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { EmailSenderService } from '../email-sender/email-sender.service';
 import { EncryptionService } from '../encryption/encryption.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { ActivateAccountDto } from './dto/activate-account.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { AccountExceptionMessageEnum } from './exception-messages/account-exception-message.enum';
 import { IAccountService } from './interfaces/interfaces';
@@ -21,6 +22,8 @@ export class AccountService implements IAccountService {
       throw new BadRequestException(AccountExceptionMessageEnum.EXISTS);
     }
 
+    const activationHash = await this.encryptionService.generateRandomHashCode();
+
     await this.prisma.user.create({
       data: {
         email: dto.email,
@@ -33,15 +36,21 @@ export class AccountService implements IAccountService {
         houseApartmentNumber: dto.houseApartmentNumber,
         phone: dto.houseApartmentNumber,
         isActive: false,
-        activationHash: await this.encryptionService.generateRandomHashCode()
+        activationHash: activationHash
       }
     });
 
-    await this.emailSenderService.sendAccountActivationLink(dto.email);
+    await this.emailSenderService.sendAccountActivationLink(activationHash, dto.email);
   }
 
-  activateAccount(): void {
-    //TO DO: activate account method
+  async activateAccount(dto: ActivateAccountDto): Promise<void> {
+    const existedUser = await this.prisma.user.findFirst({ where: { email: dto.email } });
+
+    if (!existedUser || (existedUser.activationHash !== dto.activationKey)) {
+      throw new BadRequestException(AccountExceptionMessageEnum.ACTIVATION_ERROR);
+    }
+
+    await this.prisma.user.update({ where: { email: dto.email }, data: { isActive: true, activationHash: null } });
   }
 
   resendAccountActivationEmail(): void {
