@@ -4,6 +4,7 @@ import { EncryptionService } from '../encryption/encryption.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ActivateAccountDto } from './dto/activate-account.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { AccountExceptionMessageEnum } from './exception-messages/account-exception-message.enum';
 import { IAccountService } from './interfaces/interfaces';
 
@@ -65,5 +66,36 @@ export class AccountService implements IAccountService {
     }
 
     await this.emailSenderService.sendAccountActivationLink(user.activationHash as string, user.email);
+  }
+
+  async forgotPassword(email: string): Promise<void> {
+    const user = await this.prisma.user.findFirst({ where: { email } });
+
+    if (!user) {
+      throw new BadRequestException(AccountExceptionMessageEnum.USER_DOES_NOT_EXIST);
+    }
+
+    if (!user.isActive) {
+      throw new BadRequestException(AccountExceptionMessageEnum.ACCOUNT_NOT_ACTIVE);
+    }
+
+    const resetPasswordHash = await this.encryptionService.generateRandomHashCode();
+
+    await this.prisma.user.update({ where: { email }, data: { resetPasswordHash: resetPasswordHash } });
+
+    await this.emailSenderService.sendResetPasswordLink(resetPasswordHash, email);
+  }
+
+  async resetPassword(dto: ResetPasswordDto): Promise<void> {
+    const user = await this.prisma.user.findFirst({ where: { email: dto.email, resetPasswordHash: dto.resetPasswordKey } });
+
+    if (!user) {
+      throw new BadRequestException(AccountExceptionMessageEnum.RESET_LINK_WRONG);
+    }
+
+    await this.prisma.user.update({
+      where: { email: dto.email },
+      data: { resetPasswordHash: null, password: await this.encryptionService.hashPassword(dto.newPassword) }
+    });
   }
 }

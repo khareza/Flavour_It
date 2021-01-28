@@ -9,9 +9,20 @@ export class EmailSenderService {
     await this.mailerService.sendMail({
       to: email,
       subject: 'Account Activation',
-      template: 'create-account',
+      template: 'activate-account',
       context: {
         code: `${process.env.UI_DOMAIN}/activationKey=${activationHash}&email=${email}`
+      }
+    });
+  }
+
+  public async sendResetPasswordLink(resetPasswordHash: string, email: string): Promise<void> {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Account Activation',
+      template: 'reset-password',
+      context: {
+        code: `${process.env.UI_DOMAIN}/resetPasswordKey=${resetPasswordHash}&email=${email}`
       }
     });
   }

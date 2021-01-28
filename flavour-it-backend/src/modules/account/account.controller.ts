@@ -4,6 +4,7 @@ import { ApiTagEnum } from 'src/common/enums/api-tag.enum';
 import { AccountService } from './account.service';
 import { ActivateAccountDto } from './dto/activate-account.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { IAccountController } from './interfaces/interfaces';
 
 @ApiTags(ApiTagEnum.ACCOUNT)
@@ -24,5 +25,14 @@ export class AccountController implements IAccountController {
   @Post('/resend-activation-email/:email')
   async resendAccountActivationEmail(@Param('email') email: string): Promise<void> {
     return this.accountService.resendAccountActivationEmail(email);
+  }
+
+  @Post('/forgot-password/:email')
+  async forgotPassword(@Param('email') email: string): Promise<void> {
+    return this.accountService.forgotPassword(email);
+  }
+  @Post('/reset-password')
+  async resetPassword(@Body() dto: ResetPasswordDto): Promise<void> {
+    return this.accountService.resetPassword(dto);
   }
 }
