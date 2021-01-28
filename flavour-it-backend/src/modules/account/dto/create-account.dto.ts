@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, Matches, Equals, MaxDate, MaxLength, MinLength, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, Matches, Equals, MaxLength, MinLength, IsOptional } from 'class-validator';
 import { AccountExceptionMessageEnum } from '../exception-messages/account-exception-message.enum';
 
 export class CreateAccountDto {

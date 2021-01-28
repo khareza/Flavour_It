@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Query } from '@nestjs/common';
+import { Body, Controller, Param, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiTagEnum } from 'src/common/enums/api-tag.enum';
 import { AccountService } from './account.service';
@@ -19,5 +19,10 @@ export class AccountController implements IAccountController {
   @Post('/activate-account')
   async activateAccount(@Query() dto: ActivateAccountDto): Promise<void> {
     return this.accountService.activateAccount(dto);
+  }
+
+  @Post('/resend-activation-email/:email')
+  async resendAccountActivationEmail(@Param('email') email: string): Promise<void> {
+    return this.accountService.resendAccountActivationEmail(email);
   }
 }

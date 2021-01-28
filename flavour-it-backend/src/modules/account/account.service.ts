@@ -16,9 +16,9 @@ export class AccountService implements IAccountService {
   ) {}
 
   async create(dto: CreateAccountDto): Promise<void> {
-    const existedUser = await this.prisma.user.findFirst({ where: { email: dto.email } });
+    const user = await this.prisma.user.findFirst({ where: { email: dto.email } });
 
-    if (existedUser) {
+    if (user) {
       throw new BadRequestException(AccountExceptionMessageEnum.EXISTS);
     }
 
@@ -44,16 +44,26 @@ export class AccountService implements IAccountService {
   }
 
   async activateAccount(dto: ActivateAccountDto): Promise<void> {
-    const existedUser = await this.prisma.user.findFirst({ where: { email: dto.email } });
+    const user = await this.prisma.user.findFirst({ where: { email: dto.email } });
 
-    if (!existedUser || (existedUser.activationHash !== dto.activationKey)) {
+    if (!user || user.activationHash !== dto.activationKey) {
       throw new BadRequestException(AccountExceptionMessageEnum.ACTIVATION_ERROR);
     }
 
     await this.prisma.user.update({ where: { email: dto.email }, data: { isActive: true, activationHash: null } });
   }
 
-  resendAccountActivationEmail(): void {
-    //TO DO: resend account activation email
+  async resendAccountActivationEmail(email: string): Promise<void> {
+    const user = await this.prisma.user.findFirst({ where: { email } });
+
+    if (!user) {
+      throw new BadRequestException(AccountExceptionMessageEnum.USER_DOES_NOT_EXIST);
+    }
+
+    if (user.isActive) {
+      throw new BadRequestException(AccountExceptionMessageEnum.ACCOUNT_ALREADY_ACTIVATED);
+    }
+
+    await this.emailSenderService.sendAccountActivationLink(user.activationHash as string, user.email);
   }
 }

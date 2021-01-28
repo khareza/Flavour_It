@@ -10,4 +10,6 @@ export enum AccountExceptionMessageEnum {
   PASSWORD_MIN_EXCEEDED = 'Password is too short',
   NO_AGREEMENT = 'To create account, please accept usage general conditions',
   ACTIVATION_ERROR = 'Error occurred while trying to activate account',
+  USER_DOES_NOT_EXIST = 'User with this email does not nor exist',
+  ACCOUNT_ALREADY_ACTIVATED = 'Account has been already activated',
 }
