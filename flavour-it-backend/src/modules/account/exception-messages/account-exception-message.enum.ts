@@ -10,5 +10,10 @@ export enum AccountExceptionMessageEnum {
   PASSWORD_MAX_EXCEEDED = 'Password is too long',
   PASSWORD_MIN_EXCEEDED = 'Password is too short',
   PASSWORDS_DO_NOT_MATCH = 'Passwords do not match',
-  NO_AGREEMENT = 'To create account, please accept usage general conditions'
+  NO_AGREEMENT = 'To create account, please accept usage general conditions',
+  ACTIVATION_ERROR = 'Error occurred while trying to activate account',
+  USER_DOES_NOT_EXIST = 'User with this email does not nor exist',
+  ACCOUNT_ALREADY_ACTIVATED = 'Account has been already activated',
+  ACCOUNT_NOT_ACTIVE = 'Account is not active',
+  RESET_LINK_WRONG = 'Reset link is wrong or inactive'
 }

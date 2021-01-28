@@ -12,23 +12,23 @@ services:
       MYSQL_PASSWORD: P@ssword1
     ports:
       - 3306:3306
-  flavour-it-backend:
-    build:
-      dockerfile: ./docker/Dockerfile.dev
-      context: ../flavour-it-backend
-    volumes:
-      - /app/node_modules
-      - ../flavour-it-backend:/app
-    ports:
-      - 4000:4000
-    environment:
-      - APP_ENV=development
-      - APP_PORT=4000
-      - JWT_SECRET=superSecret1234
-      - EXPIRES_IN=86400s
-      - IGNORE_EXPIRATION=false
-      - DATABASE_URL=mysql://root:P@ssword1@flavour-it-db:3306/flavour_it
-    restart: always
+  # flavour-it-backend:
+  #   build:
+  #     dockerfile: ./docker/Dockerfile.dev
+  #     context: ../flavour-it-backend
+  #   volumes:
+  #     - /app/node_modules
+  #     - ../flavour-it-backend:/app
+  #   ports:
+  #     - 4000:4000
+  #   environment:
+  #     - APP_ENV=development
+  #     - APP_PORT=4000
+  #     - JWT_SECRET=superSecret1234
+  #     - EXPIRES_IN=86400s
+  #     - IGNORE_EXPIRATION=false
+  #     - DATABASE_URL=mysql://root:P@ssword1@flavour-it-db:3306/flavour_it
+  #   restart: always
   # flavour-it-frontend:
   #   build:
   #     dockerfile: ./docker/Dockerfile.dev

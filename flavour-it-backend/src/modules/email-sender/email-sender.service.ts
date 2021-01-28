@@ -1,0 +1,29 @@
+import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class EmailSenderService {
+  constructor(private readonly mailerService: MailerService) {}
+
+  public async sendAccountActivationLink(activationHash: string, email: string): Promise<void> {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Account Activation',
+      template: 'activate-account',
+      context: {
+        code: `${process.env.UI_DOMAIN}/activationKey=${activationHash}&email=${email}`
+      }
+    });
+  }
+
+  public async sendResetPasswordLink(resetPasswordHash: string, email: string): Promise<void> {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Account Activation',
+      template: 'reset-password',
+      context: {
+        code: `${process.env.UI_DOMAIN}/resetPasswordKey=${resetPasswordHash}&email=${email}`
+      }
+    });
+  }
+}
