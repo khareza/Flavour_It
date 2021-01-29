@@ -1,3 +1,4 @@
+import { ProfileModule } from './modules/profile/profile.module';
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
@@ -9,6 +10,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 
 @Module({
   imports: [
+    ProfileModule,
     AppConfigModule,
     AuthModule,
     AccountModule,

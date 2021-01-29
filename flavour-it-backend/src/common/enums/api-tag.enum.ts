@@ -1,5 +1,6 @@
 export enum ApiTagEnum {
   ACCOUNT = 'Account',
   USERS = 'Users',
-  AUTH = 'Authentication'
+  AUTH = 'Authentication',
+  PROFILE = 'User profile'
 }
