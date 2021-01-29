@@ -1,3 +1,4 @@
 export interface ITokenPayload {
-  userId: string;
+  userId: number;
+  email: string;
 }

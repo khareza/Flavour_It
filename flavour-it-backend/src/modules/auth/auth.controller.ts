@@ -1,6 +1,8 @@
-import { Controller, Post, UseGuards, Request, Get } from '@nestjs/common';
+import { Controller, Post, UseGuards, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
+import { User } from 'src/common/decorators/user.decorator';
 import { ApiTagEnum } from 'src/common/enums/api-tag.enum';
+import { ITokenPayload } from 'src/common/interfaces/ITokenPayload.interface';
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/login-request.dto';
 import { JwtAuthGuard } from './guards/jwt/jwt.guard';
@@ -14,14 +16,14 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: LoginRequestDto })
-  async login(@Request() req: any): Promise<string> {
-    return this.authService.login(req.user);
+  async login(@User() req: ITokenPayload): Promise<string> {
+    return this.authService.login(req);
   }
 
   @Get('test-auth')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  async getSecretData(@Request() req: any): Promise<string> {
-    return req.user;
+  async getSecretData(@User() req: ITokenPayload): Promise<ITokenPayload> {
+    return req;
   }
 }
