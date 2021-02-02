@@ -26,4 +26,15 @@ export class EmailSenderService {
       }
     });
   }
+
+  public async sendChangeEmailActivationLink(changeEmailHash: string, email: string): Promise<void> {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Verify your new email address',
+      template: 'change-email',
+      context: {
+        code: `${process.env.UI_DOMAIN}/changeEmailKey=${changeEmailHash}&email=${email}`
+      }
+    });
+  }
 }

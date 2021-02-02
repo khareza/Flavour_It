@@ -281,6 +281,7 @@ model User {
   firstName            String?
   lastName             String?
   email                String        @unique
+  tempEmail            String?
   password             String
   birthDate            DateTime?
   country              String?
@@ -299,6 +300,7 @@ model User {
   finishedOrdersAmount Int           @default(0)
   activeOrdersAmount   Int           @default(0)
   resetPasswordHash    String?
+  changeEmailHash      String?
   activationHash       String?
   isActive             Boolean       @default(false)
   blockedUsers         BlockedUser[] @relation("BlockedUserRel")
