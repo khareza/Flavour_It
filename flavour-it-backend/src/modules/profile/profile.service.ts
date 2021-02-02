@@ -1,12 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CommonExceptionMessages } from 'src/common/enums/common-exception-messages.enum';
+import { EncryptionService } from '../encryption/encryption.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { ChangePasswordDto } from './dto/change-password';
 import { EditProfileDto } from './dto/edit-profile.dto';
 import { ProfileDto } from './dto/profile.dto';
+import { ProfileExceptionMessageEnum } from './exception-messages/profile-exception-messages.enum';
 
 @Injectable()
 export class ProfileService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly encryptionService: EncryptionService) {}
 
   async get(id: number): Promise<ProfileDto> {
     const user = await this.prisma.user.findFirst({
@@ -48,5 +51,23 @@ export class ProfileService {
     }
 
     await this.prisma.user.update({ where: { id }, data: { ...dto } });
+  }
+
+  async changePassword(id: number, dto: ChangePasswordDto): Promise<void> {
+    const user = await this.prisma.user.findFirst({ where: { id } });
+
+    if (!user) {
+      throw new BadRequestException(CommonExceptionMessages.UNKNOWN);
+    }
+
+    if (this.encryptionService.comparePassword(dto.newPassword, user.password)) {
+      throw new BadRequestException(ProfileExceptionMessageEnum.NEW_PASSWORD_ERR);
+    }
+
+    if (!this.encryptionService.comparePassword(dto.oldPassword, user.password)) {
+      throw new BadRequestException(ProfileExceptionMessageEnum.OLD_PASSWORD_ERR);
+    }
+
+    await this.prisma.user.update({ where: { id }, data: { password: await this.encryptionService.hashPassword(dto.newPassword) } });
   }
 }
