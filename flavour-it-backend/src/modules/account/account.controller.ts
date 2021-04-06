@@ -5,11 +5,10 @@ import { AccountService } from './account.service';
 import { ActivateAccountDto } from './dto/activate-account.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { IAccountController } from './interfaces/interfaces';
 
 @ApiTags(ApiTagEnum.ACCOUNT)
 @Controller('account')
-export class AccountController implements IAccountController {
+export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Post('/register')

@@ -6,10 +6,9 @@ import { ActivateAccountDto } from './dto/activate-account.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { AccountExceptionMessageEnum } from './exception-messages/account-exception-message.enum';
-import { IAccountService } from './interfaces/interfaces';
 
 @Injectable()
-export class AccountService implements IAccountService {
+export class AccountService {
   constructor(
     private prisma: PrismaService,
     private readonly encryptionService: EncryptionService,
