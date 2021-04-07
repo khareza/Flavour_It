@@ -19,7 +19,7 @@ export class AccountService {
     const user = await this.prisma.user.findFirst({ where: { email: dto.email } });
 
     if (user) {
-      throw new BadRequestException(AccountExceptionMessageEnum.EXISTS);
+      throw new BadRequestException({message: AccountExceptionMessageEnum.EXISTS, errorCode: AccountExceptionMessageEnum.EXISTS});
     }
 
     const activationHash = await this.encryptionService.generateRandomHashCode();
